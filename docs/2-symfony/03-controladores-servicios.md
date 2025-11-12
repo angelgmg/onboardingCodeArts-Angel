@@ -482,7 +482,7 @@ class UsuarioController extends AbstractController
 
 ### Mini reto 4
 
-- Valida que solo usuarios con rol `ROLE_ADMIN` puedan acceder (usa anotaciones `#[IsGranted('ROLE_ADMIN')]`).
+- Valida que s- Valida que solo usuarios con rol `ROLE_ADMIN` puedan acceder (usa anotaciones `#[IsGranted('ROLE_ADMIN')]`). (Para hacer pruebas habrá que comentar esta línea, de no hacerlo, Postman nos devolverá un error 401 por no contar con los permisos necesarios)olo usuarios con rol `ROLE_ADMIN` puedan acceder (usa anotaciones `#[IsGranted('ROLE_ADMIN')]`).
 
 ---
 

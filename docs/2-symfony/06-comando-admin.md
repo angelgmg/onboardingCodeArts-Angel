@@ -54,7 +54,7 @@ Crear un comando de consola que inserte un usuario administrador si no existe, i
      ```
 
 2. Implementa el método `execute()` con lógica de idempotencia y persistencia:
-   - Pega este bloque debajo de `configure()`. Busca el usuario por email; si existe, muestra aviso y termina. Si no, crea la entidad, asigna roles, hashea la contraseña y guarda.
+   - Este bloque busca el usuario por email; si existe, muestra aviso y termina. Si no, crea la entidad, asigna roles, hashea la contraseña y guarda.
 
      ```php
          protected function execute(InputInterface $input, OutputInterface $output): int
@@ -93,9 +93,6 @@ Crear un comando de consola que inserte un usuario administrador si no existe, i
          }
      }
      ```
-
-3. Personaliza email, contraseña y roles a tu dominio:
-   - Ajusta los valores por defecto en `configure()` (por ejemplo `admin@empresa.com`, contraseña temporal más robusta y nombre completo del equipo).
 
 ### Guía 3 · Probar el comando manualmente
 

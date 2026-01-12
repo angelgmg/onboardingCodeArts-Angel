@@ -21,7 +21,7 @@ Modelar en Symfony las mismas tablas que preparaste en PostgreSQL (`usuarios`, `
    - `Do you want to add support for username/password form login?` → `no` (lo configuraremos posteriormente con JWT).
 3. Genera la entidad definitiva ampliando los prompts paso a paso:
    ```bash
-   php bin/console make:user Usuario
+   php bin/console make:entity Usuario
    ```
    Symfony mostrará los prompts en inglés. Puedes responder así:
    - ` New property name (press <return> to stop adding fields):` → escribe `nombre`.

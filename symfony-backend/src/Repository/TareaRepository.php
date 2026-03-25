@@ -33,6 +33,30 @@ class TareaRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    /**
+     * Busca tareas según filtros específicos.
+     *
+     * @return Tarea[]
+     */
+    public function buscarPorFiltros(int $usuarioId, array $filtros = []): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->andWhere('t.usuario = :usuarioId')
+            ->setParameter('usuarioId', $usuarioId)
+            ->orderBy('t.fechaCreacion', 'DESC');
+
+        if (!empty($filtros['estado'])) {
+            $qb->andWhere('t.estado = :estado')
+                ->setParameter('estado', $filtros['estado']);
+        }
+
+        if (!empty($filtros['texto'])) {
+            $qb->andWhere('t.titulo LIKE :texto OR t.descripcion LIKE :texto')
+                ->setParameter('texto', '%' . $filtros['texto'] . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * Recupera las tareas pendientes de un usuario cuya fecha límite
@@ -59,6 +83,7 @@ class TareaRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
 
 
     //    /**

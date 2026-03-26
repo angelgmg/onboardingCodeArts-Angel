@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Psr\Log\LoggerInterface;
+use App\Service\NotificacionUsuario;
 
 class AdministradorUsuarioService
 {
@@ -15,8 +16,13 @@ class AdministradorUsuarioService
         private readonly UsuarioRepository $usuarioRepository,            // consultas reutilizables
         private readonly UserPasswordHasherInterface $passwordHasher,     // encripta las contraseñas
         private readonly EntityManagerInterface $entityManager,           // gestiona persistencia
-        private readonly LoggerInterface $logger                          // registra acciones de auditoría
+        private readonly LoggerInterface $logger,                         // registra acciones de auditoría
+        private readonly NotificacionUsuario $notificacionUsuario
+
+
     ) {}
+
+
 
     /**
      * Devuelve usuarios filtrando por nombre o email si se indica.
@@ -57,6 +63,15 @@ class AdministradorUsuarioService
 
         $this->logger->info('Usuario creado por admin.', ['email' => $email]); // auditoría
 
+        $this->logger->info('Usuario creado por admin.', ['email' => $email]);
+
+        if (!$this->notificacionUsuario->enviarBienvenida($usuario)) {
+            $this->logger->warning('No se pudo enviar la bienvenida al usuario creado.', [
+                'usuarioId' => $usuario->getId(),
+                'email' => $usuario->getEmail(),
+            ]);
+        }
+
         return $usuario;
     }
 
@@ -71,6 +86,15 @@ class AdministradorUsuarioService
         $this->entityManager->flush();
 
         $this->logger->info('Password reseteada por admin.', ['usuarioId' => $usuario->getId()]);
+
+        $this->logger->info('Password reseteada por admin.', ['usuarioId' => $usuario->getId()]);
+
+        if (!$this->notificacionUsuario->enviarResetPassword($usuario, $passwordTemporal)) {
+            $this->logger->warning('No se pudo enviar el correo de reset al usuario.', [
+                'usuarioId' => $usuario->getId(),
+                'email' => $usuario->getEmail(),
+            ]);
+        }
 
         return $passwordTemporal; // el controlador la devolverá para comunicarla al usuario
     }

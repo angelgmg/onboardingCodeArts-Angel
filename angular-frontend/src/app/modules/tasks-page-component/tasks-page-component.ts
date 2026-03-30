@@ -3,13 +3,21 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BackToLandingButtonComponent } from '../../shared/components/back-to-landing-button/back-to-landing-button';
 import { PageTitleComponent } from '../../shared/components/page-title/page-title';
+import { TaskFormComponent } from './components/task-form-component/task-form-component';
 
-// Definimos una interfaz para tipar nuestras tareas
 interface Task {
   title: string;
+  description?: string;
   status: 'pendiente' | 'en progreso' | 'completada';
   dueDate: string | null;
 }
+
+type TaskFormPayload = {
+  titulo: string;
+  descripcion: string;
+  estado: 'pendiente' | 'en progreso' | 'completada';
+  fechaLimite: string | null;
+};
 
 @Component({
   selector: 'app-tasks-page',
@@ -17,12 +25,12 @@ interface Task {
   imports: [
     CommonModule,
     BackToLandingButtonComponent,
-    PageTitleComponent, // Añadimos el componente a los imports
+    PageTitleComponent,
+    TaskFormComponent,
   ],
   templateUrl: './tasks-page-component.html',
 })
 export class TasksPageComponent {
-  // Creamos un array de tareas de ejemplo
   tasks: Task[] = [
     {
       title: 'Aprender Angular',
@@ -40,4 +48,8 @@ export class TasksPageComponent {
       dueDate: null,
     },
   ];
+
+  onTaskSubmitted(payload: any) {
+    console.log('Tarea guardada', payload);
+  }
 }

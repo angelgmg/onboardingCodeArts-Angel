@@ -1,0 +1,92 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+  <div>
+    <label for="titulo" class="block text-sm font-medium text-gray-700">
+      Título
+    </label>
+    <input
+      id="titulo"
+      type="text"
+      formControlName="titulo"
+      class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+      [ngClass]="{
+        'border-red-500 focus:border-red-500 focus:ring-red-500':
+          form.get('titulo')?.invalid && form.get('titulo')?.touched
+      }"
+    />
+
+    <p
+      *ngIf="form.get('titulo')?.hasError('required') && form.get('titulo')?.touched"
+      class="mt-1 text-sm text-red-600"
+    >
+      El título es obligatorio.
+    </p>
+
+    <p
+      *ngIf="form.get('titulo')?.hasError('minlength') && form.get('titulo')?.touched"
+      class="mt-1 text-sm text-red-600"
+    >
+      El título debe tener al menos 3 caracteres.
+    </p>
+  </div>
+
+  <div>
+    <label for="descripcion" class="block text-sm font-medium text-gray-700">
+      Descripción
+    </label>
+    <textarea
+      id="descripcion"
+      formControlName="descripcion"
+      rows="4"
+      class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+      [ngClass]="{
+        'border-red-500 focus:border-red-500 focus:ring-red-500':
+          form.get('descripcion')?.hasError('maxlength') &&
+          form.get('descripcion')?.touched
+      }"
+    ></textarea>
+
+    <p
+      *ngIf="form.get('descripcion')?.hasError('maxlength') && form.get('descripcion')?.touched"
+      class="mt-1 text-sm text-red-600"
+    >
+      La descripción no puede superar los 500 caracteres.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div>
+      <label for="estado" class="block text-sm font-medium text-gray-700">
+        Estado
+      </label>
+      <select
+        id="estado"
+        formControlName="estado"
+        class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+      >
+        <option value="pendiente">Pendiente</option>
+        <option value="en progreso">En progreso</option>
+        <option value="completada">Completada</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="fechaLimite" class="block text-sm font-medium text-gray-700">
+        Fecha límite
+      </label>
+      <input
+        id="fechaLimite"
+        type="date"
+        formControlName="fechaLimite"
+        class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500"
+      />
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    class="inline-flex h-11 items-center justify-center rounded-lg bg-sky-600 px-5 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+    [disabled]="form.invalid"
+  >
+    Guardar
+  </button>
+</form>

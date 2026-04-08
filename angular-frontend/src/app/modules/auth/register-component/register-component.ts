@@ -1,20 +1,30 @@
-// src/app/modules/auth/register-component/register-component.ts
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  FormGroup,
+} from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth-service';
+import { ToastService } from '../../../shared/services/toast-service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './register-component.html',
 })
 export class RegisterComponent implements OnInit {
   form!: FormGroup;
   loading = false;
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private toast: ToastService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -31,8 +41,14 @@ export class RegisterComponent implements OnInit {
     }
     this.loading = true;
     this.auth.register(this.form.getRawValue() as any).subscribe({
-      next: () => this.router.navigateByUrl('/login'),
-      error: () => (this.loading = false),
+      next: () => {
+        this.toast.success('Usuario registrado. Inicia sesión');
+        this.router.navigateByUrl('/login');
+      },
+      error: () => {
+        this.toast.error('No se pudo registrar');
+        this.loading = false;
+      },
     });
   }
 }

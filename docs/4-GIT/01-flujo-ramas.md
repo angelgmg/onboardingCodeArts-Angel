@@ -21,7 +21,7 @@ Reproducir el flujo de ramas del proyecto: `main` estable, ramas de feature y co
    git checkout -b feature-login-mariagonzalez
    ```
 
-### Guía 2 · Realizar un cambio atómico
+### Guía 2 · Realizar un cambio atómico, hola hola
 
 1. Modifica un archivo sencillo (por ejemplo, añade una nota al README).
 2. Revisa qué cambió:

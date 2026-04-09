@@ -8,7 +8,7 @@ Crear un comando de consola que inserte un usuario administrador si no existe, i
 
 ### Guía 1 · Generar el comando
 
-1. Desde `symfony-backend`, ejecuta `php bin/console make:command app:create-admin`.  
+1. Desde `symfony-backend`, ejecuta php bin/console make:command app:create-admin.  
    - Revisa la documentación oficial: <https://symfony.com/doc/current/console.html>.
 2. Lanza el comando `php bin/console make:command app:create-admin` y verifica que se haya creado el archivo `src/Command/CreateAdminCommand.php` dentro de la carpeta `src/Command/`.
 

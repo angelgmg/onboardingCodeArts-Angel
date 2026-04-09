@@ -1,0 +1,5 @@
+<section>
+  <h1>Panel de administración</h1>
+  <p>Bienvenido, {{ store.user()?.email }}.</p>
+  <p>Roles: {{ store.user()?.roles?.join(', ') }}</p>
+</section>

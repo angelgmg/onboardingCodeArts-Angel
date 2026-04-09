@@ -1,25 +1,33 @@
-// src/app/shared/services/auth-service.ts
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-
-type LoginPayload = { email: string; password: string };
-type RegisterPayload = { email: string; password: string; nombre?: string };
-type LoginResponse = { token: string };
+import {
+  AuthCredentials,
+  RegisterPayload,
+  AuthResponse,
+  AuthenticatedUser,
+} from '../interfaces/auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  private API = '/api'; // base URL con proxy para evitar CORS
+  private API = 'http://localhost:8000/api'; // con proxy, usa '/api'
 
-  login(payload: LoginPayload): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.API}/login`, payload).pipe(
-      tap((res) => localStorage.setItem('token', res.token))
-    );
+  login(payload: AuthCredentials): Observable<AuthResponse> {
+    return this.http
+      .post<AuthResponse>(`${this.API}/login`, payload)
+      .pipe(tap((res) => localStorage.setItem('token', res.token)));
   }
 
   register(payload: RegisterPayload): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.API}/auth/register`, payload);
+    return this.http.post<{ message: string }>(
+      `${this.API}/auth/register`,
+      payload,
+    );
+  }
+
+  me(): Observable<AuthenticatedUser> {
+    return this.http.get<AuthenticatedUser>(`${this.API}/me`);
   }
 
   getToken(): string | null {

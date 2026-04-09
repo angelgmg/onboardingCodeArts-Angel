@@ -405,7 +405,7 @@ class TaskController extends AbstractController
 ### Mini reto 3
 
 - Añade validaciones para que los `payload` sin JSON válido devuelvan 400.
-- Devuelve mensajes personalizados cuando se actualiza o elimina una tarea (`['message' => 'Tarea eliminada']`).
+- Devuelve mensajes personalizados cuando se actualiza o elimina una tarea (`['message' => 'Tarea eliminada']`).777
 
 ### Paso 2 · Controlador de administración
 

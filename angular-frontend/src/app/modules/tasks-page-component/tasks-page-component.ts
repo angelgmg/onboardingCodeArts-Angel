@@ -1,9 +1,12 @@
 // src/app/modules/tasks/tasks-page-component.ts
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BackToLandingButtonComponent } from '../../shared/components/back-to-landing-button/back-to-landing-button';
 import { PageTitleComponent } from '../../shared/components/page-title/page-title';
 import { TaskFormComponent } from './components/task-form-component/task-form-component';
+import { TaskListComponent } from './components/task-list-component/task-list-component';
+import { TaskApiService } from '../../features/tasks/data/task-api';
+import { TaskPayload } from '../../shared/interfaces/tasks';
 
 interface Task {
   title: string;
@@ -27,29 +30,35 @@ type TaskFormPayload = {
     BackToLandingButtonComponent,
     PageTitleComponent,
     TaskFormComponent,
+    TaskListComponent,
   ],
   templateUrl: './tasks-page-component.html',
 })
 export class TasksPageComponent {
-  tasks: Task[] = [
-    {
-      title: 'Aprender Angular',
-      status: 'en progreso',
-      dueDate: '2025-11-15',
-    },
-    {
-      title: 'Practicar con TypeScript',
-      status: 'pendiente',
-      dueDate: '2025-11-20',
-    },
-    {
-      title: 'Estudiar Tailwind',
-      status: 'completada',
-      dueDate: null,
-    },
-  ];
+  @ViewChild(TaskListComponent) list?: TaskListComponent; // referencia para refrescar la lista
 
-  onTaskSubmitted(payload: any) {
-    console.log('Tarea guardada', payload);
+  constructor(private readonly api: TaskApiService) {}
+
+  onTaskSubmitted(payload: TaskPayload) {
+    // 1) Crear en la API
+    this.api.createTask(payload).subscribe({
+      next: () => {
+        // 2) Refrescar la lista
+        this.list?.loadTasks();
+        // 3) (Ej. 05) Aquí mostrarías un toast de éxito
+      },
+      error: (err) => {
+        console.error('Error al crear la tarea', err);
+        // (Ej. 05) Aquí mostrarías un toast de error
+      },
+    });
+  }
+  onFiltersApply(f: {
+    q?: string;
+    estado?: 'pendiente' | 'en progreso' | 'completada';
+    fechaDesde?: string | null;
+    fechaHasta?: string | null;
+  }) {
+    this.list?.loadTasks({ q: f.q, estado: f.estado });
   }
 }

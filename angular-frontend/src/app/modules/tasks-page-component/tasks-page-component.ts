@@ -7,6 +7,7 @@ import { TaskFormComponent } from './components/task-form-component/task-form-co
 import { TaskListComponent } from './components/task-list-component/task-list-component';
 import { TaskApiService } from '../../features/tasks/data/task-api';
 import { TaskPayload } from '../../shared/interfaces/tasks';
+import { ToastService } from '../../shared/services/toast-service';
 
 interface Task {
   title: string;
@@ -37,20 +38,18 @@ type TaskFormPayload = {
 export class TasksPageComponent {
   @ViewChild(TaskListComponent) list?: TaskListComponent; // referencia para refrescar la lista
 
-  constructor(private readonly api: TaskApiService) {}
+  constructor(
+    private readonly api: TaskApiService,
+    private readonly toast: ToastService,
+  ) {}
 
   onTaskSubmitted(payload: TaskPayload) {
-    // 1) Crear en la API
     this.api.createTask(payload).subscribe({
       next: () => {
-        // 2) Refrescar la lista
+        this.toast.success('Tarea guardada');
         this.list?.loadTasks();
-        // 3) (Ej. 05) Aquí mostrarías un toast de éxito
       },
-      error: (err) => {
-        console.error('Error al crear la tarea', err);
-        // (Ej. 05) Aquí mostrarías un toast de error
-      },
+      error: () => this.toast.error('No se pudo guardar la tarea'),
     });
   }
   onFiltersApply(f: {
